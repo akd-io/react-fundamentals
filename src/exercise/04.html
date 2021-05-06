@@ -8,15 +8,36 @@
   <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.js"></script>
 
   <script type="text/babel">
-    const Message = props => <div className="message" {...props} />
+    function Message({subject, greeting}) {
+      return (
+        <div className="message">
+          {greeting}, {subject}
+        </div>
+      )
+    }
+    const PropTypes = {
+      nonEmptyString(props, propName, componentName) {
+        if (typeof props[propName] !== 'string' || props[propName] == '') {
+          return new Error(
+            `${componentName}'s prop "${propName}" was not a non-empty string.`,
+          )
+        }
+      },
+    }
+    Message.propTypes = {
+      subject: PropTypes.nonEmptyString,
+      greeting: PropTypes.nonEmptyString,
+    }
+
     const element = (
       <>
         <div className="container">
-          <Message>Hello World</Message>
-          <Message>Goodbye World</Message>
+          <Message greeting="Hello" subject="World" />
+          <Message greeting="Goodbye" subject="World" />
         </div>
       </>
     )
+
     ReactDOM.render(element, document.getElementById('root'))
   </script>
 </body>
